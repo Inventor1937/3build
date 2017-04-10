@@ -2675,6 +2675,8 @@ ifeq ($(build_ota_package),true)
 name := $(TARGET_PRODUCT)
 ifeq ($(TARGET_BUILD_TYPE),debug)
   name := $(name)_debug
+  # Assume non-release recoveries skip signature check
+  extra_ota_args := --no_signing
 endif
 name := $(name)-ota-$(FILE_NAME_TAG)
 
@@ -2727,6 +2729,7 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) \
 	   --extracted_input_target_files $(patsubst %.zip,%,$(BUILT_TARGET_FILES_PACKAGE)) \
 	   -p $(HOST_OUT) \
 	   -k $(KEY_CERT_PAIR) \
+	   $(extra_ota_args) \
 	   --override_device=$(OTA_SCRIPT_OVERRIDE_DEVICE) \
 	   --backup=$(backuptool) \
 	   --brotli=$(brotli) \
